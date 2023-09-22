@@ -207,6 +207,13 @@ This will run a plan and pass the changeset to be executed by terraform. Apply s
 
 If we want to automatically approve an apply we can provide the auto approve flag eg. `terraform apply --auto-approve`
 
+##### Problems Applying S3 Bucket
+
+When applying bucket with main.tf, we needed to make sure that the parameters for resource "aws_s3_bucket" "bucket name" had upper as false and lower as true
+
+If you don't have these set then the terraform plan will try to name bucket with uppercase which is not allowed for an S3 bucket. `terraform plan` will say it's good but when using `terraform apply`, it will fail with invalid bucket name
+
+[S3 Bucket Naming Rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 #### Terraform Destroy
 
 `terraform destroy`
