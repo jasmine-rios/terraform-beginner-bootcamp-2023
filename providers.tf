@@ -1,11 +1,11 @@
 terraform {
-#    cloud {
-#     organization = "example-org-0dcec0"
+   cloud {
+    organization = "example-org-0dcec0"
 
-#     workspaces {
-#       name = "terra-house-hello-kitty-island-adventure"
-#     }
-#   }
+    workspaces {
+      name = "terraform-cloud"
+    }
+  }
   required_providers {
 
     aws = {
