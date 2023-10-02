@@ -171,3 +171,37 @@ resource "aws_s3_object" "index_html" {
   source = "${path.root}/public/index.html
   etag = filemd5(var.index_html_filepath)
 }
+
+## Terraform Locals
+
+Locals allow us to define local variables.
+It can be very useful when we need to transform data into another format and have a refrenced variable.
+```go
+locals {
+  s3_origin_id = "myS3Origin"
+}
+```
+
+[Locals Values](https://developer.hashicorp.com/terraform/language/values/locals)
+## Terraform Data Sources
+
+This allows us to source data from cloud resources.
+
+This is useful when want to reference cloud resources without inputting them. e.g.
+
+```go
+data "aws_caller_identity" "current" {}
+```
+
+[Data Sources](https://developer.hashicorp.com/terraform/language/data-sources)
+
+## Working with JSON
+
+We use the jsonencode to create the json policy inline in the hcl.
+
+```go
+jsonencode({"hello"="world"})
+{"hello":"world"}
+```
+
+[Jsonencode](https://developer.hashicorp.com/terraform/language/functions/jsonencode)
