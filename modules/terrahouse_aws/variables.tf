@@ -41,11 +41,11 @@ variable "error_html_filepath" {
 }
 
 variable "content_version" {
-  description = "Version number for the content"
-  type        = number
+  description = "The content version. Should be a positive integer starting"
+  type = number
 
   validation {
-    condition     = var.content_version > 0 && ceil(var.content_version) == floor(var.content_version)
+    condition = var.content_version > 0 && floor(var.content_version) == var.content_version
     error_message = "Content version must be a positive integer starting at 1."
   }
 }
