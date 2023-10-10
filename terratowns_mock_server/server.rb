@@ -121,6 +121,7 @@ class TerraTownsMockServer < Sinatra::Base
     # to make it easier to work with the code
     name = payload["name"]
     description = payload["description"]
+    domain_name = payload["domain_name"]
     content_version = payload["content_version"]
     town = payload["town"]
 
@@ -229,7 +230,7 @@ class TerraTownsMockServer < Sinatra::Base
       error 404, "failed to find home with provided uuid and bearer token"
     end
     # delete from our mock database
-    uuid = home['uuid']
+    uuid = $home[:uuid]
     $home = {}
     { uuid: uuid }.to_json
   end
