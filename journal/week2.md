@@ -52,3 +52,11 @@ bundle exec ruby server.rb
 ```
 
 All of the code for our websever is installed in our server.rb file
+
+## CRUD
+
+Terraform provider resources utilize CRUD.
+
+CRUD stands for Create, Read, Update, and Delete
+
+[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
