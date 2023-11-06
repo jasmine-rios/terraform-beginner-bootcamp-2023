@@ -46,7 +46,7 @@ func Provider() *schema.Provider {
 			"endpoint": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The endpoint for the external service",
+				Description: "The endpoint for hte external service",
 			},
 			"token": {
 				Type:        schema.TypeString,
@@ -105,12 +105,12 @@ func Resource() *schema.Resource {
 			"description": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Description of hine",
+				Description: "Description of home",
 			},
 			"domain_name": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Domain name of home eg. *cloudfront.net",
+				Description: "Domain name of home eg. *.cloudfront.net",
 			},
 			"town": {
 				Type:        schema.TypeString,
@@ -124,12 +124,12 @@ func Resource() *schema.Resource {
 			},
 		},
 	}
-	log.Print("Resource:end")
+	log.Print("Resource:start")
 	return resource
 }
 
 func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	log.Print("ResourceHouseCreate:start")
+	log.Print("resourceHouseCreate:start")
 	var diags diag.Diagnostics
 
 	config := m.(*Config)
@@ -146,9 +146,9 @@ func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(err)
 	}
 
-	// Construct the HTTP Request
 	url := config.Endpoint + "/u/" + config.UserUuid + "/homes"
 	log.Print("URL: " + url)
+	// Construct the HTTP Request
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		return diag.FromErr(err)
@@ -172,22 +172,23 @@ func resourceHouseCreate(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(err)
 	}
 
-	// StatusOK - 200 HTTP Response Code
+	// StatusOK = 200 HTTP Response Code
 	if resp.StatusCode != http.StatusOK {
-		return diag.FromErr(fmt.Errorf("failed to create home resource, status code: %d, status: %s, body: %s", resp.StatusCode, resp.Status, responseData))
+		return diag.FromErr(fmt.Errorf("failed to create home resource, status_code: %d, status: %s, body %s", resp.StatusCode, resp.Status, responseData))
 	}
-	// handle response status
 
-	log.Print("ResourceHouseCreate:end")
+	// handle response status
 
 	homeUUID := responseData["uuid"].(string)
 	d.SetId(homeUUID)
+
+	log.Print("resourceHouseCreate:end")
 
 	return diags
 }
 
 func resourceHouseRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	log.Print("ResourceHouseRead:start")
+	log.Print("resourceHouseRead:start")
 	var diags diag.Diagnostics
 
 	config := m.(*Config)
@@ -214,16 +215,10 @@ func resourceHouseRead(ctx context.Context, d *schema.ResourceData, m interface{
 	}
 	defer resp.Body.Close()
 
-	// parse response JSON
 	var responseData map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&responseData); err != nil {
-		return diag.FromErr(err)
-	}
-	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
 		// parse response JSON
-		var responseData map[string]interface{}
 		if err := json.NewDecoder(resp.Body).Decode(&responseData); err != nil {
 			return diag.FromErr(err)
 		}
@@ -231,19 +226,19 @@ func resourceHouseRead(ctx context.Context, d *schema.ResourceData, m interface{
 		d.Set("description", responseData["description"].(string))
 		d.Set("domain_name", responseData["domain_name"].(string))
 		d.Set("content_version", responseData["content_version"].(float64))
-	}
-	if resp.StatusCode != http.StatusNotFound {
+	} else if resp.StatusCode != http.StatusNotFound {
 		d.SetId("")
 	} else if resp.StatusCode != http.StatusOK {
-		return diag.FromErr(fmt.Errorf("failed to read home resource, status code: %d, status: %s, body: %s", resp.StatusCode, resp.Status, responseData))
+		return diag.FromErr(fmt.Errorf("failed to read home resource, status_code: %d, status: %s, body %s", resp.StatusCode, resp.Status, responseData))
 	}
 
-	log.Print("ResourceHouseRead:end")
+	log.Print("resourceHouseRead:end")
+
 	return diags
 }
 
 func resourceHouseUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	log.Print("ResourceHouseUpdate:start")
+	log.Print("resourceHouseUpdate:start")
 	var diags diag.Diagnostics
 
 	config := m.(*Config)
@@ -285,7 +280,7 @@ func resourceHouseUpdate(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(fmt.Errorf("failed to update home resource, status_code: %d, status: %s", resp.StatusCode, resp.Status))
 	}
 
-	log.Print("ResourceHouseUpdate:end")
+	log.Print("resourceHouseUpdate:end")
 
 	d.Set("name", payload["name"])
 	d.Set("description", payload["description"])
@@ -294,7 +289,7 @@ func resourceHouseUpdate(ctx context.Context, d *schema.ResourceData, m interfac
 }
 
 func resourceHouseDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	log.Print("ResourceHouseDelete:start")
+	log.Print("resourceHouseDelete:start")
 	var diags diag.Diagnostics
 
 	config := m.(*Config)
@@ -321,13 +316,13 @@ func resourceHouseDelete(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 	defer resp.Body.Close()
 
-	// StatusOK - 200 HTTP Response Code
+	// StatusOK = 200 HTTP Response Code
 	if resp.StatusCode != http.StatusOK {
-		return diag.FromErr(fmt.Errorf("failed to delete home resource, status code: %d, status: %s", resp.StatusCode, resp.Status))
+		return diag.FromErr(fmt.Errorf("failed to delete home resource, status_code: %d, status: %s", resp.StatusCode, resp.Status))
 	}
 
 	d.SetId("")
 
-	log.Print("ResourceHouseDelete:end")
+	log.Print("resourceHouseDelete:end")
 	return diags
 }

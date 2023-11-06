@@ -37,7 +37,8 @@ resource "terratowns_home" "home" {
 Hello Kitty Island Adventure is a social game where you try to make the best island and make friends with the Sanrio crew. This guide will introduce you to the characters and the world in which the game exists.
 DESCRIPTION
   #domain_name = module.terrahouse_aws.cloudfront_url
+  # Mock CDN below
   domain_name = "3fdq3gz.cloudfront.net"
   town = "gamers-grotto"
-  content_version = 2
+  content_version = 3
 }
