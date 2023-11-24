@@ -5,17 +5,17 @@ terraform {
         version = "1.0.0"
       }
     }
-#    cloud {
-#     organization = "example-org-0dcec0"
+   cloud {
+    organization = "example-org-0dcec0"
 
-#     workspaces {
-#       name = "terra-house-hello-kitty-island-adventure"
-#     }
-#   }
-#
-# }
+    workspaces {
+      name = "terra-house-hello-kitty-island-adventure"
+    }
+  }
 
 }
+
+
 provider "terratowns" {
     endpoint = var.terratowns_endpoint
     user_uuid = var.teacherseat_user_uuid
